@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Obtener ubicación</title>
+</head>
+<body>
+  <p id="mensaje">Cargando…</p>
+  <script>
+    // Al cargarse la página, solicita la ubicación
+    window.onload = function() {
+      if (!navigator.geolocation) {
+        document.getElementById('mensaje').textContent = 'Geolocalización no soportada.';
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lon = pos.coords.longitude.toFixed(6);
+          // Aquí puedes:
+          // 1) Mostrarla:
+          document.getElementById('mensaje').innerHTML =
+            `Latitud: ${lat}<br>Longitud: ${lon}<br>` +
+            `<a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Ver en Google Maps</a>`;
+          // 2) O enviarla a tu servidor:
+          // fetch('https://tuservidor.com/recibe', {
+          //   method: 'POST',
+          //   headers: {'Content-Type':'application/json'},
+          //   body: JSON.stringify({lat,lon})
+          // });
+        },
+        function(err) {
+          document.getElementById('mensaje').textContent =
+            'Error: ' + err.message;
+        },
+        { enableHighAccuracy: true }
+      );
+    };
+  </script>
+</body>
+</html>
